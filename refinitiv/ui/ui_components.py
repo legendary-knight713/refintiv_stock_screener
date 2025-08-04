@@ -302,11 +302,11 @@ def render_filter_group(group_idx, group):
             render_kpi_instance(group_idx, kpi_idx, kpi_name, group)
         st.markdown("---")
 
-def render_kpi_multiselect(kpi_options):
+def render_kpi_multiselect(kpi_labels):
     """Render the KPI multi-select widget and return the selected KPIs."""
     return st.multiselect(
         label='Select KPI Filters',
-        options=kpi_options,
+        options=kpi_labels,
         key='selected_kpis',
         placeholder='---choose KPIs---'
     )

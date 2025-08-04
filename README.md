@@ -1,22 +1,25 @@
-## BorsdataAPI
-Our simple Python console test client to get a quick start with Börsdata API.
-[More details about API is found here](https://github.com/Borsdata-Sweden/API)
+## Refinitiv DataStream REST API Client
 
-## Api Key
-If you dont have an API Key, you need to Apply for an API key on [Börsdata webbpage](https://borsdata.se/).
-You need to be a Pro member to get Access to API.
+A simple Python console client to get started with the Refinitiv DataStream REST API.
+
+> This project demonstrates how to authenticate with a **username/password**, fetch time series and instrument metadata, and export results to Excel or JSON.
+
+## API Access
+
+To use the DataStream REST API, you need valid **Refinitiv credentials**.
+
+- Sign up or request access via your organization's Refinitiv account manager.
+- Ensure your user has access to the **DataStream Web Services**.
+
+## Authentication
+
+This client uses **username and password** to obtain an access token. These credentials should be stored securely (e.g., in a `.env` file or external config).
 
 ## Installation
-Python 3+ needed!
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install dependencies.
+
+Requires Python 3.7+.
+
+Install dependencies using pip:
+
 ```bash
-pip3 install -r requirements.txt
-```
-
-## How to get started with Client
-Download project and run it from a terminal or any Python-IDE [PyCharm](https://www.jetbrains.com/pycharm/).
-In constants.py you replace xxxx with your unique API Key.
-Run borsdata_client.py (or excel_exporter.py)
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+pip install -r requirements.txt

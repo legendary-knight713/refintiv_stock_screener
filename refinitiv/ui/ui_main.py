@@ -35,10 +35,10 @@ def main():
     kpi_json_path = os.path.join(PACKAGE_ROOT, 'data', 'kpi_options.json')
     with open(kpi_json_path, 'r') as f:
         kpi_json = json.load(f)
-    kpi_options = [item['value'] for item in kpi_json]  # Use 'value' for Refinitiv field codes
+    kpi_labels = [item['label'] for item in kpi_json]  # Use 'label' for display
     
     render_stocks(all_instruments_df)    
-    render_kpi_filter_groups(render_filter_group, kpi_options)
+    render_kpi_filter_groups(render_filter_group, kpi_labels)
     kpi_filter_validate()
 
     # Add preset management functionality
@@ -66,6 +66,7 @@ def main():
             kpi_filter_settings = {}
             for idx, kf in enumerate(st.session_state['kpi_filters']):
                 kpi_name = kf['kpi']
+                kpi_value = next((item['value'] for item in kpi_json if item['label'] == kpi_name), None)
                 kpi_filter_settings[idx] = {
                     'abs_enabled': kf['method'] == 'Absolute',
                     'abs_operator': kf.get('operator'),
@@ -79,7 +80,7 @@ def main():
                     'trend_m': kf.get('trend_m'),
                     'direction_enabled': kf['method'] == 'Direction',
                     'direction': kf.get('direction', 'either'),
-                    'kpi_name': kpi_name,
+                    'kpi_name': kpi_value,
                     'data_frequency': kf.get('data_frequency', 'Quarterly'),
                     'duration_type': kf.get('duration_type', 'Last N Quarters'),
                     'start_date': kf.get('start_date'),
@@ -138,7 +139,8 @@ def main():
         all_instruments_df = st.session_state['filtered_instruments']
         show_results(
             all_instruments_df,
-            kpi_options,
+            kpi_labels,
+            kpi_json,
             all_markets_df,
             all_sectors_df,
             all_countries_df,

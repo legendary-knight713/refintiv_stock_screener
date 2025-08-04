@@ -6,7 +6,8 @@ from refinitiv.filters.filter_engine import filter_data_by_time_range
 
 def show_results(
     filtered_instruments,
-    kpi_options,  # <-- Use this instead of kpi_short_to_refinitiv
+    kpi_labels,
+    kpi_json,
     all_markets_df,
     all_sectors_df,
     all_countries_df,
@@ -27,8 +28,8 @@ def show_results(
         key='sorter_select'
     )
 
-    def show_cagr_options(kpi_options):
-        cagr_kpi = st.selectbox('CAGR KPI', [''] + kpi_options, key='cagr_kpi_stable')
+    def show_cagr_options(kpi_labels):
+        cagr_kpi = st.selectbox('CAGR KPI', [''] + kpi_labels, key='cagr_kpi_stable')
         years = [''] + list(range(1995, datetime.datetime.now().year + 1))
         start_year = st.selectbox('CAGR Start Year', years, key='cagr_start_year_stable')
         end_year = st.selectbox('CAGR End Year', years, key='cagr_end_year_stable')
@@ -54,7 +55,7 @@ def show_results(
     cagr_kpi, cagr_start_year, cagr_end_year, calculate_cagr_clicked = None, None, None, False
     if sorter == 'CAGR':
         st.subheader('CAGR Calculation Settings')
-        cagr_kpi, cagr_start_year, cagr_end_year, calculate_cagr_clicked = show_cagr_options(kpi_options)
+        cagr_kpi, cagr_start_year, cagr_end_year, calculate_cagr_clicked = show_cagr_options(kpi_labels)
 
     total_results = len(filtered_instruments)
     total_pages = max(1, (total_results + PAGE_SIZE - 1) // PAGE_SIZE)
@@ -176,7 +177,8 @@ def show_results(
         if id_col and 'kpi_data' in st.session_state:
             # Add a column for each KPI filter showing the actual values
             for kf in st.session_state['kpi_filters']:
-                kpi_name = kf['kpi']
+                kpi_label = kf['kpi']
+                kpi_name = next((item['value'] for item in kpi_json if item['label'] == kpi_label), None)
                 duration_type = kf.get('duration_type', 'Last N Quarters')
                 operator = kf.get('operator', '')
                 value = kf.get('value', '')

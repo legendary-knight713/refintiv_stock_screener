@@ -159,7 +159,7 @@ def render_stocks(all_instruments_df):
         st.info("No stock data available.")
 
     
-def render_kpi_filter_groups(render_filter_group, kpi_options):
+def render_kpi_filter_groups(render_filter_group, kpi_labels):
     st.subheader('KPI Filter Groups')
     col1, col2, col3 = st.columns([6, 2, 2])
     with col1:
@@ -173,7 +173,7 @@ def render_kpi_filter_groups(render_filter_group, kpi_options):
         }
         </style>
     """, unsafe_allow_html=True)
-        selected_kpis = render_kpi_multiselect(kpi_options)
+        selected_kpis = render_kpi_multiselect(kpi_labels)
     with col2:
         st.markdown(
             """
