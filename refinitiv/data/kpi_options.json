@@ -1,0 +1,18 @@
+[
+  {"label": "Earnings Per Share (EPS)", "value": "EPS"},
+  {"label": "Price/Earnings Ratio (P/E)", "value": "PE"},
+  {"label": "Price Last (PL)", "value": "PL"},
+  {"label": "Price High (PH)", "value": "PH"},
+  {"label": "Price Open (PO)", "value": "PO"},
+  {"label": "Adjusted Closing Price", "value": "PA"},
+  {"label": "Dividend Yield (DY)", "value": "DY"},
+  {"label": "Bid Price (PB)", "value": "PB"},
+  {"label": "Trading Volume (VO)", "value": "VO"},
+  {"label": "Market Value (MV)", "value": "MV"},
+  {"label": "Turnover by Value (TO)", "value": "TO"},
+  {"label": "Average Daily Volume (ADV)", "value": "ADV"},
+  {"label": "Volume Weighted Average Price (VWAP)", "value": "VWAP"},
+  {"label": "Price/Book Value (PBV)", "value": "PBV"},
+  {"label": "Dividend Per Share (DPS)", "value": "DPS"},
+  {"label": "Return Index (RI)", "value": "RI"}
+]

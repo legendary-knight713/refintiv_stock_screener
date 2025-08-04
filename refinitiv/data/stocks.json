@@ -1,0 +1,12 @@
+[
+    {"insId": 1, "ticker": "VOD",  "name": "Vodafone Group PLC",      "countryId": 2, "marketId": 3, "sectorId": 3, "branchId": 5},
+    {"insId": 2, "ticker": "BARC", "name": "Barclays PLC",            "countryId": 2, "marketId": 3, "sectorId": 4, "branchId": 9},
+    {"insId": 3, "ticker": "HSBA", "name": "HSBC Holdings plc",       "countryId": 2, "marketId": 3, "sectorId": 4, "branchId": 9},
+    {"insId": 4, "ticker": "GLEN", "name": "Glencore plc",            "countryId": 2, "marketId": 3, "sectorId": 6, "branchId": 11},
+    {"insId": 5, "ticker": "BP.",  "name": "BP plc",                  "countryId": 2, "marketId": 3, "sectorId": 5, "branchId": 10},
+    {"insId": 6, "ticker": "AZN",  "name": "AstraZeneca plc",         "countryId": 2, "marketId": 3, "sectorId": 2, "branchId": 4},
+    {"insId": 7, "ticker": "GSK",  "name": "GSK plc",                 "countryId": 2, "marketId": 3, "sectorId": 2, "branchId": 4},
+    {"insId": 8, "ticker": "LLOY", "name": "Lloyds Banking Group plc","countryId": 2, "marketId": 3, "sectorId": 4, "branchId": 9},
+    {"insId": 9, "ticker": "RIO",  "name": "Rio Tinto PLC",           "countryId": 2, "marketId": 3, "sectorId": 6, "branchId": 11},
+    {"insId": 10,"ticker": "ULVR", "name": "Unilever plc",            "countryId": 2, "marketId": 3, "sectorId": 7, "branchId": 12}
+]
