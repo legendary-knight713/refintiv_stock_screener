@@ -1,0 +1,18 @@
+{
+  "Save4": {
+    "filter_groups": [],
+    "group_relationships": "AND",
+    "selected_kpis": [],
+    "selected_countries": [],
+    "selected_markets": [],
+    "selected_sectors": [],
+    "selected_industries": [],
+    "stock_indice": "S&P 500",
+    "stock_from_date": "2025-08-01",
+    "stock_to_date": "2025-08-07",
+    "better_rate": 20.0,
+    "market_checkbox_states": {},
+    "industry_checkbox_states": {},
+    "created_at": "2025-08-07T19:20:12.481623"
+  }
+}

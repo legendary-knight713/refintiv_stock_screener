@@ -61,3 +61,13 @@ def create_method_config(method_type, kpi_name, method_count):
         'trend_m': None,
         'data_frequency': 'Quarterly'
     }
+    
+def convert_to_dataframes(stock_dict):
+    try:
+        data = stock_dict['P']
+        df = pd.DataFrame(data, columns=['date', 'price'])
+        df['date'] = pd.to_datetime(df['date'], format='%Y.%m.%d')
+        return df
+    except Exception as e:
+        print("Error:", e)
+        return pd.DataFrame()

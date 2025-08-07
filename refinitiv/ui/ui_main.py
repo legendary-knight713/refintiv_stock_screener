@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import json
+from datetime import datetime, date
 from refinitiv.api.refinitiv_api import RefinitivAPI
 from refinitiv.ui.ui_layout import setup_page, apply_custom_css
 from refinitiv.ui.ui_state import initialize_session_state, kpi_filter_validate, reset_pagination, pagination_controls
@@ -17,6 +18,7 @@ from refinitiv.filters.kpi_logic import (
 )
 from refinitiv.filters.filter_engine import evaluate_filter_tree
 from refinitiv.ui.ui_presets import render_preset_management, apply_pending_preset
+from refinitiv.ui.ui_helpers import convert_to_dataframes
 
 def main():
     setup_page()
@@ -43,7 +45,7 @@ def main():
     
     kpi_filter_validate()
 
-    render_stock_index_filter()
+    stock_index, stock_from_date, stock_to_date, better_rate =  render_stock_index_filter()
     
     render_preset_management()
 
@@ -135,6 +137,51 @@ def main():
                 status_text.empty()
             all_instruments_df = all_instruments_df[all_instruments_df['symbol'].isin(list(final_stock_ids))]
             st.session_state['kpi_data'] = all_kpi_data
+        
+        #Apply stock index filter after KPI filtering
+        if stock_index and stock_from_date and stock_to_date is not None and better_rate > 0.0:
+            with st.spinner('Filtering by stock index performance...'):
+                stock_from_date = stock_from_date.strftime('%Y-%m-%d') if isinstance(stock_from_date, (datetime, date)) else stock_from_date
+                stock_to_date = stock_to_date.strftime('%Y-%m-%d') if isinstance(stock_to_date, (datetime, date)) else stock_to_date
+                index_price_first = api.fetch_datastream_timeseries(instrument=stock_index, datatypes=['PI'], start=stock_from_date, end='0', frequency='D', kind=0)
+                index_first_price = index_price_first['PI'][0][1]
+                index_price_last = api.fetch_datastream_timeseries(instrument=stock_index, datatypes=['PI'], start=stock_to_date, end='0', frequency='D', kind=0)
+                index_last_price = index_price_last['PI'][0][1]
+                
+                index_return = ((index_last_price - index_first_price) / index_first_price) if index_first_price != 0 else 0
+                
+                passed_ids = []
+                
+                for _, row in all_instruments_df.iterrows():
+                    stock_id = row['symbol']
+                    # Fetch stock prices for the specified date range
+                    stock_prices = api.fetch_datastream_timeseries(instrument=stock_id, datatypes=['P'], start=stock_from_date, end=stock_to_date, frequency='D', kind=1)
+                    # Wrap the stock_prices dict and pass to converter
+                    if isinstance(stock_prices, dict):
+                        df = convert_to_dataframes(stock_prices)
+                        if df.empty or len(df) < 2:
+                            continue # Skip if no data or not enough data points
+                        first_price = df['price'].iloc[0]
+                        last_price = df['price'].iloc[-1]
+                        
+                        if first_price == 0:
+                            continue # Avoid division by zero
+                        
+                        stock_return = (last_price - first_price) / first_price
+                        
+                        # Calculate relative outperformance compared to index return
+                        if index_return != 0:
+                            relative_outperformance = (stock_return - index_return) / abs(index_return) * 100
+                        else:
+                            relative_outperformance = float('inf') if stock_return > 0 else float('-inf')
+                        
+                        if relative_outperformance >= better_rate:
+                            passed_ids.append(stock_id)
+                    else:
+                        print("Unexpected format for stock_prices:", type(stock_prices))
+
+                all_instruments_df = all_instruments_df[all_instruments_df['symbol'].isin(passed_ids)]        
+            
         st.session_state['filtered_instruments'] = all_instruments_df
         st.session_state['results_ready'] = True
     if st.session_state.get('results_ready') and st.session_state.get('filtered_instruments') is not None:

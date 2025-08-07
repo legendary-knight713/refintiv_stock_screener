@@ -292,12 +292,13 @@ def render_stock_index_filter():
         
         selected_display_name = symbol_to_name.get(st.session_state['stock_indice'], '--- Choose stock indice ---')
         
-        selected_stock_indice = st.selectbox(
+        st.selectbox(
             'Select stock indice', 
             stock_indice_names, 
             key='stock_indice',
             index=stock_indice_names.index(selected_display_name)
         )
+        selected_stock_indice = name_to_symbol.get(st.session_state['stock_indice'], None) if st.session_state['stock_indice'] != '--- Choose stock indice ---' else None
     with col2:
         stock_from_date = st.date_input(
             'From date',

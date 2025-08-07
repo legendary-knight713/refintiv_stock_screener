@@ -150,6 +150,8 @@ class RefinitivAPI:
             for sym_val in dt_item.get("SymbolValues", []):
                 # "Value" is list with time series matching dates array length
                 values = sym_val.get("Value", [])
+                if not isinstance(values, list):
+                    values = [values]
                 # Pair dates with values by index
                 series = [(dates[j], values[j]) for j in range(min(len(dates), len(values)))]
                 data_by_type[dtype].extend(series)

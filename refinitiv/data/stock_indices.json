@@ -1,6 +1,6 @@
 [
-  { "name":"S&P 500", "symbol": "LS&PCOMP" },
-  { "name":"OMXS30", "symbol": "LSWEDOMX" },
-  { "name":"DAX", "symbol": "LDAXINDX" },
-  { "name":"OSEBX", "symbol": "LOSEBXST" }
+  { "name":"S&P 500", "symbol": "S&PCOMP" },
+  { "name":"OMXS30", "symbol": "SWEDOMX" },
+  { "name":"DAX", "symbol": "DAXINDX" },
+  { "name":"OSEBX", "symbol": "OSEBXST" }
 ]

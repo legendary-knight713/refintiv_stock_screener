@@ -85,7 +85,7 @@ def show_results(
                         if candidate in paginated_instruments.columns:
                             id_col = candidate
                             break
-                    page_stock_ids = list(paginated_instruments['ticker'])
+                    page_stock_ids = list(paginated_instruments['symbol'])
                     kpi_name = next((item['value'] for item in kpi_json if item['label'] == cagr_kpi), None)
 
                     if kpi_name is None:
@@ -102,7 +102,7 @@ def show_results(
                                 for kpi, records in data.items():
                                     for date, value in records:
                                         if isinstance(value, (int, float)):
-                                            rows.append({'insId': stock, 'year': date, 'kpiValue': value})
+                                            rows.append({'stock': stock, 'date': date, 'kpiValue': value})
                             
                             except:
                                 st.warning(f"No data available for KPI '{cagr_kpi}' for stock '{stock}'")
@@ -111,8 +111,8 @@ def show_results(
                         kpi_lookup = {}
                         if kpi_df is not None and not kpi_df.empty:
                             for _, row in kpi_df.iterrows():
-                                stock = row.get('insId')
-                                year = row.get('year').split('.')[0]
+                                stock = row.get('stock')
+                                year = row.get('date').split('.')[0]
                                 value = row.get('kpiValue')
                                 if stock is not None and year is not None and value is not None:
                                     try:
@@ -121,7 +121,7 @@ def show_results(
                                         continue
                         cagr_values = []
                         for idx, row in paginated_instruments.iterrows():
-                            stock = row['ticker']
+                            stock = row['symbol']
                             try:
                                 start_val = kpi_lookup.get((stock, str(cagr_start_year)))
                                 end_val = kpi_lookup.get((stock, str(cagr_end_year)))
