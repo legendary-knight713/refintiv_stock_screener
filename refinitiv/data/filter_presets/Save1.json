@@ -1,23 +1,22 @@
 {
-  "First Preset": {
+  "Save1": {
     "filter_groups": [
       {
         "id": "group_0",
         "filters": [
-          "EPS",
-          "PH"
+          "Earnings Per Share"
         ],
         "operator": "AND",
         "filter_settings": {
-          "EPS_0": {
+          "Earnings Per Share_0": {
             "methods": [
               {
                 "type": "Absolute",
-                "id": "EPS_Absolute_0",
+                "id": "Earnings Per Share_Absolute_0",
                 "operator_abs": ">",
-                "value": 0.5,
+                "value": 2.5,
                 "duration_type": "Last N Quarters",
-                "last_n": 1,
+                "last_n": 3,
                 "rel_operator": null,
                 "rel_value": null,
                 "rel_period": null,
@@ -28,35 +27,13 @@
                 "data_frequency": "Quarterly"
               }
             ]
-          },
-          "PH_1": {
-            "methods": [
-              {
-                "type": "Relative",
-                "id": "PH_Relative_0",
-                "operator_abs": null,
-                "value": null,
-                "duration_type": "Last N Quarters",
-                "last_n": 3,
-                "rel_operator": ">=",
-                "rel_value": 0.2,
-                "rel_period": null,
-                "direction": null,
-                "trend_type": null,
-                "trend_n": null,
-                "trend_m": null,
-                "data_frequency": "Quarterly",
-                "rel_mode": "Quarter-over-Quarter (QoQ)"
-              }
-            ]
           }
         }
       }
     ],
     "group_relationships": "AND",
     "selected_kpis": [
-      "EPS",
-      "PH"
+      "Earnings Per Share"
     ],
     "selected_countries": [],
     "selected_markets": [],
@@ -65,6 +42,6 @@
     "selected_stock_indice": "--- Choose stock indice ---",
     "market_checkbox_states": {},
     "industry_checkbox_states": {},
-    "created_at": "2025-08-04T03:33:54.800667"
+    "created_at": "2025-08-07T04:49:07.253210"
   }
 }

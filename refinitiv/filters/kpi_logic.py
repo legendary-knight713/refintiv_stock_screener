@@ -207,35 +207,35 @@ def fetch_kpi_data_for_calculation(stocks, st, kpi_filter_settings):
         for stock in stocks:
             if freq == 'Yearly':
                 if last_n is not None:
-                    start_date = f"-{int(last_n)}Y"
+                    start_date = f"-{int(last_n) - 1}Y"
                     end_date = '0'
                     data = api.fetch_datastream_timeseries(instrument=stock, datatypes=[kpi_name], start=start_date, end=end_date, frequency='Y', kind=1)
                     for kpi, records in data.items():
                         for date, value in records:
                             if isinstance(value, (int, float)):
-                                rows.append({'insId': stock, 'year': date, 'kpiValue': value})
+                                rows.append({'symbol': stock, 'date': date, 'kpiValue': value})
                 else:
                     data = api.fetch_datastream_timeseries(instrument = stock, datatypes = [kpi_name], start = start_date, end = end_date, frequency = 'Y', kind=1)
                     for kpi, records in data.items():
                         for date, value in records:
                             if isinstance(value, (int, float)):
-                                rows.append({'insId': stock, 'year': date, 'kpiValue': value})
+                                rows.append({'symbol': stock, 'date': date, 'kpiValue': value})
                 
             else:
                 if last_n is not None:
-                    start_date = f"-{int(last_n)}Q"
+                    start_date = f"-{int(last_n) - 1}Q"
                     end_date = '0'
                     data = api.fetch_datastream_timeseries(instrument=stock, datatypes=[kpi_name], start=start_date, end=end_date, frequency='Q', kind=1)
                     for kpi, records in data.items():
                         for date, value in records:
                             if isinstance(value, (int, float)):
-                                rows.append({'insId': stock, 'year': date, 'kpiValue': value})
+                                rows.append({'symbol': stock, 'date': date, 'kpiValue': value})
                 else:
                     data = api.fetch_datastream_timeseries(instrument = stock, datatypes = [kpi_name], start = start_date, end = end_date, frequency = 'Q', kind=1)
                     for kpi, records in data.items():
                         for date, value in records:
                             if isinstance(value, (int, float)):
-                                rows.append({'insId': stock, 'year': date, 'kpiValue': value})
+                                rows.append({'symbol': stock, 'date': date, 'kpiValue': value})
 
         kpi_data[kpi_name] = pd.DataFrame(rows)
     return kpi_data 

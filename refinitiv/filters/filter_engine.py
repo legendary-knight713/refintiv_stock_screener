@@ -80,15 +80,6 @@ def evaluate_kpi_filter(kpi_id: int, kpi_settings: dict, kpi_data: pd.DataFrame)
     """
     duration_type = kpi_settings.get('duration_type', 'Last N Quarters')
     last_n = kpi_settings.get('last_n', 1)
-    # start_date = kpi_settings.get('start_date')
-    # end_date = kpi_settings.get('end_date')
-    # trend_enabled = kpi_settings.get('trend_enabled')
-    # if trend_enabled:
-    #     duration_type = 'Last N Quarters'
-    #     last_n = kpi_settings.get('trend_n') 
-    #     kpi_data = filter_data_by_time_range(kpi_data, duration_type, last_n or 1, start_date or '', end_date or '')
-    # else:
-    #     kpi_data = filter_data_by_time_range(kpi_data, duration_type, last_n or 1, start_date or '', end_date or '')
     
     if kpi_data.empty:
         return False
@@ -220,11 +211,7 @@ def evaluate_kpi_filter(kpi_id: int, kpi_settings: dict, kpi_data: pd.DataFrame)
     direction = kpi_settings.get('direction', 'either')
     if direction_enabled and not kpi_data.empty and len(kpi_data) >= 2:
         # For direction filters, compare start and end value in the filtered range
-        if 'period' in kpi_data.columns:
-            # Sort by year, period if available
-            kpi_data = kpi_data.sort_values(['year', 'period'])
-        else:
-            kpi_data = kpi_data.sort_values(['year'])
+        kpi_data = kpi_data.sort_values(['date'])
         start_value = kpi_data.iloc[0]['kpiValue']
         end_value = kpi_data.iloc[-1]['kpiValue']
         if direction == 'positive' and end_value <= start_value:

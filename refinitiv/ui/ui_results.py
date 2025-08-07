@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
 import datetime
-from refinitiv.ui.ui_helpers import fetch_yearly_kpi_history
-from refinitiv.filters.filter_engine import filter_data_by_time_range
+import tempfile
 
 def show_results(
     filtered_instruments,
@@ -87,9 +86,9 @@ def show_results(
                             id_col = candidate
                             break
                     page_stock_ids = list(paginated_instruments['ticker'])
-                    kpi_id = cagr_kpi  
+                    kpi_name = next((item['value'] for item in kpi_json if item['label'] == cagr_kpi), None)
 
-                    if kpi_id is None:
+                    if kpi_name is None:
                         st.warning(f"Could not find KPI ID for {cagr_kpi} (mapped: {cagr_kpi_refinitiv})")
                     else:
                         rows = []
@@ -99,7 +98,7 @@ def show_results(
                             start_date = f"-{cur_year - int(cagr_start_year)}Y"
                             end_date = f"-{cur_year - int(cagr_end_year)}Y"
                             try:
-                                data = api.fetch_datastream_timeseries(instrument=stock, datatypes=[cagr_kpi], start=start_date, end=end_date, frequency='Y', kind=1)
+                                data = api.fetch_datastream_timeseries(instrument=stock, datatypes=[kpi_name], start=start_date, end=end_date, frequency='Y', kind=1)
                                 for kpi, records in data.items():
                                     for date, value in records:
                                         if isinstance(value, (int, float)):
@@ -212,15 +211,17 @@ def show_results(
                     direction = kf.get('direction', 'either')
                     column_header = f"{kpi_name} Direction: {direction} {duration_str}"
                 else:
+                    last_n = kf.get('trend_n')
+                    duration_str = f"(last {last_n} periods)"
                     column_header = f"{kpi_name} {duration_str}"
                 
                 # Get actual KPI values for each stock
                 kpi_values = []
                 for _, stock in paginated_instruments.iterrows():
-                    stock_id = stock['ticker']
+                    stock_id = stock['symbol']
                     kpi_df = st.session_state['kpi_data'].get(kpi_name, pd.DataFrame())
                     # Filter for this stock
-                    stock_kpi_df = kpi_df[kpi_df['insId'] == stock_id] if not kpi_df.empty else pd.DataFrame()
+                    stock_kpi_df = kpi_df[kpi_df['symbol'] == stock_id] if not kpi_df.empty else pd.DataFrame()
                     if not stock_kpi_df.empty:
                         if not stock_kpi_df.empty and 'kpiValue' in stock_kpi_df.columns:
                             values = stock_kpi_df['kpiValue'].tolist()
@@ -228,6 +229,7 @@ def show_results(
                             values = []
                         # Format values based on method type
                         if method == 'Trend':
+                            last_n = kf.get('trend_n')
                             values = values[-last_n:]
                             if len(values) > 1:
                                 values_str = ' → '.join([f"{v:.4f}" for v in values])
@@ -256,6 +258,7 @@ def show_results(
     st.write(f"Showing {len(paginated_instruments)} stocks for selected countries")
     # Show the results table
     paginated_instruments_display = paginated_instruments.copy().reset_index(drop=True)
+    paginated_instruments_display.index += start + 1  # Start index from overall position
     st.dataframe(paginated_instruments_display[display_columns])
 
     if total_pages > 1:
@@ -292,8 +295,6 @@ def show_results(
     price_history_data = None
     if export_clicked and export_enabled:
         st.info('Fetching historical price data. This may take a while for many stocks...')
-        import tempfile
-        import io
         id_col = None
         for candidate in ['insId', 'id', 'instrumentId']:
             if candidate in paginated_instruments.columns:

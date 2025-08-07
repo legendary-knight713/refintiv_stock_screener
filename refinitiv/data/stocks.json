@@ -1,12 +1,12 @@
 [
-    {"insId": 1, "ticker": "VOD",  "name": "Vodafone Group PLC",      "countryId": 2, "marketId": 3, "sectorId": 3, "branchId": 5},
-    {"insId": 2, "ticker": "BARC", "name": "Barclays PLC",            "countryId": 2, "marketId": 3, "sectorId": 4, "branchId": 9},
-    {"insId": 3, "ticker": "HSBA", "name": "HSBC Holdings plc",       "countryId": 2, "marketId": 3, "sectorId": 4, "branchId": 9},
-    {"insId": 4, "ticker": "GLEN", "name": "Glencore plc",            "countryId": 2, "marketId": 3, "sectorId": 6, "branchId": 11},
-    {"insId": 5, "ticker": "BP.",  "name": "BP plc",                  "countryId": 2, "marketId": 3, "sectorId": 5, "branchId": 10},
-    {"insId": 6, "ticker": "AZN",  "name": "AstraZeneca plc",         "countryId": 2, "marketId": 3, "sectorId": 2, "branchId": 4},
-    {"insId": 7, "ticker": "GSK",  "name": "GSK plc",                 "countryId": 2, "marketId": 3, "sectorId": 2, "branchId": 4},
-    {"insId": 8, "ticker": "LLOY", "name": "Lloyds Banking Group plc","countryId": 2, "marketId": 3, "sectorId": 4, "branchId": 9},
-    {"insId": 9, "ticker": "RIO",  "name": "Rio Tinto PLC",           "countryId": 2, "marketId": 3, "sectorId": 6, "branchId": 11},
-    {"insId": 10,"ticker": "ULVR", "name": "Unilever plc",            "countryId": 2, "marketId": 3, "sectorId": 7, "branchId": 12}
+    {"insId": 1, "ticker": "NVDA.O",    "name": "NVIDIA",           "symbol": "@NVDA", "exchange": "United States", "currency": "U$", "sector": "Technology Hardware and Equipment" },
+    {"insId": 2, "ticker": "MSFT.O",    "name": "MICROSOFT",        "symbol": "@MSFT", "exchange": "United States", "currency": "U$", "sector": "Software and Computer Services" },
+    {"insId": 3, "ticker": "AAPL.O",    "name": "APPLE",            "symbol": "@AAPL", "exchange": "United States", "currency": "U$", "sector": "Technology Hardware and Equipment" },
+    {"insId": 4, "ticker": "AMZN.O",    "name": "AMAZON.COM",       "symbol": "@AMZN", "exchange": "United States", "currency": "U$", "sector": "Retailers" },
+    {"insId": 5, "ticker": "META.O",    "name": "META PLATFORMS A", "symbol": "@META", "exchange": "United States", "currency": "U$", "sector": "Software and Computer Services" },
+    {"insId": 6, "ticker": "AVGO.O",    "name": "BROADCOM",         "symbol": "@AVGO", "exchange": "United States", "currency": "U$", "sector": "Technology Hardware and Equipment" },
+    {"insId": 7, "ticker": "TSLA.O",    "name": "TESLA",            "symbol": "@TSLA", "exchange": "United States", "currency": "U$", "sector": "Automobiles and Parts" },
+    {"insId": 8, "ticker": "WMT",       "name": "WALMART",          "symbol": "U:WMT", "exchange": "United States", "currency": "U$", "sector": "Retailers" },
+    {"insId": 9, "ticker": "LLY",       "name": "ELI LILLY",        "symbol": "U:LLY", "exchange": "United States", "currency": "U$", "sector": "Pharmaceuticals and Biotechnology" },
+    {"insId": 10,"ticker": "ORCL.K",    "name": "ORACLE",           "symbol": "U:ORCL", "exchange": "United States", "currency": "U$", "sector": "Software and Computer Services" }
 ]

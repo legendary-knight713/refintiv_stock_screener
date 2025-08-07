@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 import json
+import datetime
 from refinitiv.ui.ui_components import render_kpi_multiselect
 
 def render_filters(all_instruments_df, all_countries_df, all_markets_df, all_sectors_df, all_branches_df):
@@ -131,20 +132,7 @@ def render_filters(all_instruments_df, all_countries_df, all_markets_df, all_sec
                 else:
                     selected_industries.discard(i_id)
 
-    # Stock Indice Combo Box
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    json_path = os.path.join(BASE_DIR, '../data/stock_indices.json')
-    with open(json_path, 'r') as f:
-        stock_indice_options = json.load(f)
-    stock_indice_options = ['--- Choose stock indice ---'] + stock_indice_options
-    selected_stock_indice = st.selectbox(
-        'Select stock indice', 
-        stock_indice_options, 
-        key='stock_indice',
-        index=0
-    )
-
-    return selected_countries, selected_markets, selected_sectors, selected_industries, selected_stock_indice, country_id_name_map, sector_id_name_map
+    return selected_countries, selected_markets, selected_sectors, selected_industries, country_id_name_map, sector_id_name_map
 
 def render_stocks(all_instruments_df):
     st.subheader(f"Stocks ({len(all_instruments_df)})")
@@ -157,7 +145,6 @@ def render_stocks(all_instruments_df):
         st.dataframe(df_display)
     else:
         st.info("No stock data available.")
-
     
 def render_kpi_filter_groups(render_filter_group, kpi_labels):
     st.subheader('KPI Filter Groups')
@@ -273,3 +260,62 @@ def render_kpi_filter_groups(render_filter_group, kpi_labels):
         return ''
     st.session_state['logic_preview'] = generate_logic_preview()
     st.info(f"**Filter Formula:** {st.session_state['logic_preview']}")
+
+def render_stock_index_filter():
+    st.subheader('Stock Index Filter')
+    
+    today = datetime.date.today()
+    default_from = today.replace(year=today.year - 20) if today.year > 20 else today
+
+    # Initialize session state defaults if not set
+    if 'stock_from_date' not in st.session_state:
+        st.session_state['stock_from_date'] = default_from
+    if 'stock_to_date' not in st.session_state:
+        st.session_state['stock_to_date'] = today
+    if 'better_rate' not in st.session_state:
+        st.session_state['better_rate'] = 0.0
+    if 'stock_indice' not in st.session_state:
+        st.session_state['stock_indice'] = '--- Choose stock indice ---'
+
+    col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
+    with col1:
+        # Load options from file
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        json_path = os.path.join(BASE_DIR, '../data/stock_indices.json')
+        with open(json_path, 'r') as f:
+            stock_indice_raw = json.load(f)
+        
+        name_to_symbol = {item['name']: item['symbol'] for item in stock_indice_raw}
+        symbol_to_name = {item['symbol']: item['name'] for item in stock_indice_raw}
+        
+        stock_indice_names = ['--- Choose stock indice ---'] + list(name_to_symbol.keys())
+        
+        selected_display_name = symbol_to_name.get(st.session_state['stock_indice'], '--- Choose stock indice ---')
+        
+        selected_stock_indice = st.selectbox(
+            'Select stock indice', 
+            stock_indice_names, 
+            key='stock_indice',
+            index=stock_indice_names.index(selected_display_name)
+        )
+    with col2:
+        stock_from_date = st.date_input(
+            'From date',
+            key='stock_from_date',
+            max_value=today
+        )
+    with col3:    
+        stock_to_date = st.date_input(
+            'To date (optional)',
+            key='stock_to_date',
+            max_value=today
+        )
+    with col4:
+        better_rate = st.number_input(
+            'Better Performance Rate (%)',
+            key='better_rate',
+            step=0.1,
+            help="Stocks must outperform the index by this percentage to be included in results."
+        )
+
+    return selected_stock_indice, stock_from_date, stock_to_date, better_rate

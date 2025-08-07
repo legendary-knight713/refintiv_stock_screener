@@ -6,7 +6,7 @@ from refinitiv.ui.ui_layout import setup_page, apply_custom_css
 from refinitiv.ui.ui_state import initialize_session_state, kpi_filter_validate, reset_pagination, pagination_controls
 from refinitiv.ui.ui_constants import PAGE_SIZE
 from refinitiv.ui.ui_data import fetch
-from refinitiv.ui.ui_filters import render_kpi_filter_groups, render_stocks
+from refinitiv.ui.ui_filters import render_kpi_filter_groups, render_stocks, render_stock_index_filter
 from refinitiv.ui.ui_results import show_results
 from refinitiv.ui.ui_components import render_filter_group
 from refinitiv.filters.kpi_logic import (
@@ -15,7 +15,7 @@ from refinitiv.filters.kpi_logic import (
     validate_logic_tree,
     fetch_kpi_data_for_calculation,
 )
-from refinitiv.ui.ui_helpers import fetch_yearly_kpi_history, test_kpi_quarterly_availability
+from refinitiv.filters.filter_engine import evaluate_filter_tree
 from refinitiv.ui.ui_presets import render_preset_management, apply_pending_preset
 
 def main():
@@ -38,10 +38,13 @@ def main():
     kpi_labels = [item['label'] for item in kpi_json]  # Use 'label' for display
     
     render_stocks(all_instruments_df)    
+    
     render_kpi_filter_groups(render_filter_group, kpi_labels)
+    
     kpi_filter_validate()
 
-    # Add preset management functionality
+    render_stock_index_filter()
+    
     render_preset_management()
 
     fetch_clicked = st.button('Fetch Results', key='fetch_results')
@@ -57,7 +60,7 @@ def main():
                 group_relationships
             )
         if st.session_state['kpi_filters'] and 'kpi_logic_tree' in st.session_state:
-            stock_ids = list(all_instruments_df['ticker'])
+            stock_ids = list(all_instruments_df['symbol'])
             # No KPI metadata needed for Refinitiv - skip quarterly availability test
             problematic_kpis = []
             if problematic_kpis:
@@ -107,13 +110,12 @@ def main():
                     st.stop()
                 final_stock_ids = []
                 passed_count = 0
-                total_stocks = len(all_instruments_df['ticker'])
+                total_stocks = len(all_instruments_df['symbol'])
                 progress_bar = st.progress(0)
                 status_text = st.empty()
-                for i, stock_id in enumerate(all_instruments_df['ticker']):
+                for i, stock_id in enumerate(all_instruments_df['symbol']):
                     try:
-                        from refinitiv.filters.filter_engine import evaluate_filter_tree
-                        stock_kpis = {kpi_name: kpi_df[kpi_df['insId'] == stock_id] for kpi_name, kpi_df in all_kpi_data.items()}
+                        stock_kpis = {kpi_name: kpi_df[kpi_df['symbol'] == stock_id] for kpi_name, kpi_df in all_kpi_data.items()}
                         result = evaluate_filter_tree(
                             tree,
                             kpi_filter_settings,
@@ -131,7 +133,7 @@ def main():
                         continue
                 progress_bar.empty()
                 status_text.empty()
-            all_instruments_df = all_instruments_df[all_instruments_df['ticker'].isin(list(final_stock_ids))]
+            all_instruments_df = all_instruments_df[all_instruments_df['symbol'].isin(list(final_stock_ids))]
             st.session_state['kpi_data'] = all_kpi_data
         st.session_state['filtered_instruments'] = all_instruments_df
         st.session_state['results_ready'] = True

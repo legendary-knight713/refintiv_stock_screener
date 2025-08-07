@@ -1,11 +1,6 @@
 [
-  "OMXS30",
-  "OMXH25",
-  "OMXC25",
-  "OSEBX25",
-  "DOW30",
-  "Nasdaq100",
-  "S&P100",
-  "FTSE100",
-  "DAX30"
-] 
+  { "name":"S&P 500", "symbol": "LS&PCOMP" },
+  { "name":"OMXS30", "symbol": "LSWEDOMX" },
+  { "name":"DAX", "symbol": "LDAXINDX" },
+  { "name":"OSEBX", "symbol": "LOSEBXST" }
+]
